@@ -38,6 +38,7 @@ namespace realsense2_camera
     const bool ALIGN_DEPTH    = false;
     const bool POINTCLOUD     = false;
     const bool ALLOW_NO_TEXTURE_POINTS = false;
+    const bool ALLOW_NO_DEPTH_POINTS = false;
     const bool SYNC_FRAMES    = false;
 
     const int IMAGE_WIDTH     = 640;

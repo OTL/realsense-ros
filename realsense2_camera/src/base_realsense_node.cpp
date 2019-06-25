@@ -482,6 +482,7 @@ void BaseRealSenseNode::getParameters()
     }
 
     _pnh.param("allow_no_texture_points", _allow_no_texture_points, ALLOW_NO_TEXTURE_POINTS);
+    _pnh.param("allow_no_depth_points", _allow_no_depth_points, ALLOW_NO_DEPTH_POINTS);    
     _pnh.param("clip_distance", _clipping_distance, static_cast<float>(-1.0));
     _pnh.param("linear_accel_cov", _linear_accel_cov, static_cast<double>(0.01));
     _pnh.param("angular_velocity_cov", _angular_velocity_cov, static_cast<double>(0.01));
@@ -1857,15 +1858,14 @@ void BaseRealSenseNode::publishPointCloud(rs2::points pc, const ros::Time& t, co
     std::list<unsigned int> valid_indices;
     for (size_t point_idx=0; point_idx < pc.size(); point_idx++, vertex++, color_point++)
     {
-        if (static_cast<float>(vertex->z) > 0)
-        {
+        if (static_cast<float>(vertex->z) > 0 || _allow_no_depth_points) {
             float i = static_cast<float>(color_point->u);
             float j = static_cast<float>(color_point->v);
             if (_allow_no_texture_points || (i >= 0.f && i <= 1.f && j >= 0.f && j <= 1.f))
             {
                 valid_indices.push_back(point_idx);
             }
-        }
+        }	    
     }
 
     sensor_msgs::PointCloud2 msg_pointcloud;
